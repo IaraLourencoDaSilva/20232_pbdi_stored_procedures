@@ -1,37 +1,60 @@
 -- Exercicio
+
+-- 1.2 Adicione um procedimento ao sistema do restaurante. Ele deve
+-- - receber um parâmetro de entrada (IN) que representa o código de um cliente
+-- - exibir, com RAISE NOTICE, o total de pedidos que o cliente tem
+
+CREATE OR REPLACE PROCEDURE sp_add_procedimento(
+	IN cod_cliente INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+	total_pedidos INT;
+BEGIN 
+	SELECT COUNT(*) INTO total_pedidos
+	FROM tb_pedido
+	WHERE cod_cliente = cod_cliente;
+	
+	RAISE NOTICE 'O total de pedido é: %', total_pedidos;
+END;
+$$
+
+
+
 -- 1.1 Adicione uma tabela de log ao sistema do restaurante. Ajuste cada procedimento para
 -- que ele registre
 -- - a data em que a operação aconteceu
 -- - o nome do procedimento executado
 
 -- Procedimento original de inserção na tb_cliente
-CREATE OR REPLACE PROCEDURE sp_inserir_cliente(
-	IN nome VARCHAR(200)
-)LANGUAGE plpgsql
-AS $$
-BEGIN
-    INSERT INTO tb_cliente(nome) VALUES (nome);
-END;
-$$
+-- CREATE OR REPLACE PROCEDURE sp_inserir_cliente(
+-- 	IN nome VARCHAR(200)
+-- )LANGUAGE plpgsql
+-- AS $$
+-- BEGIN
+--     INSERT INTO tb_cliente(nome) VALUES (nome);
+-- END;
+-- $$
 
--- Ajuste o procedimento para registrar no log
-CREATE OR REPLACE PROCEDURE sp_inserir_cliente_com_log(
-	nome_cliente VARCHAR(200)
-) LANGUAGE plpgsql
-AS $$
-BEGIN
-    INSERT INTO tb_cliente (nome) VALUES (nome);
-    INSERT INTO tb_log (nome_procedimento) VALUES ('inserir_cliente_com_log');
-END;
-$$
+-- -- Ajuste o procedimento para registrar no log
+-- CREATE OR REPLACE PROCEDURE sp_inserir_cliente_com_log(
+-- 	nome_cliente VARCHAR(200)
+-- ) LANGUAGE plpgsql
+-- AS $$
+-- BEGIN
+--     INSERT INTO tb_cliente (nome) VALUES (nome);
+--     INSERT INTO tb_log (nome_procedimento) VALUES ('inserir_cliente_com_log');
+-- END;
+-- $$
 
 
 
-CREATE TABLE IF NOT EXISTS tb_log (
-    cod_log SERIAL PRIMARY KEY,
-    data_operacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    nome_procedimento VARCHAR(200) NOT NULL
-);
+-- CREATE TABLE IF NOT EXISTS tb_log (
+--     cod_log SERIAL PRIMARY KEY,
+--     data_operacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     nome_procedimento VARCHAR(200) NOT NULL
+-- );
 
 
 
