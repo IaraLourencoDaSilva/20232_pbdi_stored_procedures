@@ -1,4 +1,30 @@
 -- Exercicio
+-- 1.6 Para cada procedimento criado, escreva um bloco anônimo que o coloca em execução.
+-- Procedimento para obter o total de pedidos de um cliente e exibir a mensagem:
+DO $$
+DECLARE
+    cod_cliente INT := 1;
+    total_pedidos INT;
+BEGIN
+    CALL total_pedidos_cliente(cod_cliente, total_pedidos);
+    RAISE NOTICE 'Mensagem: O cliente com código % possui um total de % pedidos.', cod_cliente, total_pedidos;
+END;
+$$;
+
+-- Procedimento para cadastrar clientes e exibir a mensagem:
+
+DO $$
+DECLARE
+    nome text[] := ARRAY['Pedro', 'Ana', 'João', 'Maria']; 
+    mensagem VARCHAR;
+BEGIN
+    CALL cadastrar_clientes(nome, mensagem);
+    RAISE NOTICE 'Mensagem: %', mensagem;
+END;
+$$;
+
+
+
 -- 1.5 Adicione um procedimento ao sistema do restaurante. Ele deve
 -- - Receber um parâmetro VARIADIC contendo nomes de pessoas
 -- - Fazer uma inserção na tabela de clientes para cada nome recebido
@@ -6,29 +32,29 @@
 -- “Os clientes: Pedro, Ana, João etc foram cadastrados”
 -- Evidentemente, o resultado deve conter os nomes que de fato foram enviados por meio do
 -- parâmetro VARIADIC.
-CREATE OR REPLACE PROCEDURE cadastrar_clientes(
-	nome VARCHAR[], 
-	OUT mensagem VARCHAR
-) LANGUAGE plpgsql
-AS $$
-DECLARE
-    cliente_inseridos INT := 0;
-BEGIN
-    FOREACH nome IN ARRAY nome
-    LOOP
-        INSERT INTO tb_cliente (nome) VALUES (nome);
-        cliente_inseridos := cliente_inseridos + 1;
-    END LOOP;
+-- CREATE OR REPLACE PROCEDURE cadastrar_clientes(
+-- 	nome VARCHAR[], 
+-- 	OUT mensagem VARCHAR
+-- ) LANGUAGE plpgsql
+-- AS $$
+-- DECLARE
+--     cliente_inseridos INT := 0;
+-- BEGIN
+--     FOREACH nome IN ARRAY nome
+--     LOOP
+--         INSERT INTO tb_cliente (nome) VALUES (nome);
+--         cliente_inseridos := cliente_inseridos + 1;
+--     END LOOP;
 
-    IF cliente_inseridos = 0 THEN
-        mensagem := 'Nenhum cliente foi cadastrado.';
-    ELSIF cliente_inseridos = 1 THEN
-        mensagem := 'O cliente ' || nome[1] || ' foi cadastrado.';
-    ELSE
-        mensagem := 'Os clientes: ' || array_to_string(nome, ', ') || ' foram cadastrados.';
-    END IF;
-END;
-$$;
+--     IF cliente_inseridos = 0 THEN
+--         mensagem := 'Nenhum cliente foi cadastrado.';
+--     ELSIF cliente_inseridos = 1 THEN
+--         mensagem := 'O cliente ' || nome[1] || ' foi cadastrado.';
+--     ELSE
+--         mensagem := 'Os clientes: ' || array_to_string(nome, ', ') || ' foram cadastrados.';
+--     END IF;
+-- END;
+-- $$;
 
 
 
@@ -65,7 +91,7 @@ $$;
 
 -- 1.3 Reescreva o exercício 1.2 de modo que o total de pedidos seja armazenado em uma
 -- variável de saída (OUT).
--- CREATE OR REPLACE PROCEDURE total_pedidos_cliente(
+-- CREATE OR REPLACE PROCEDURE total_pedidos_clientes(
 -- 	IN cod_cliente INT, 
 -- 	OUT total_pedidos INT
 -- )
