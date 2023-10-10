@@ -1,24 +1,63 @@
 -- Exercicio
+-- 1.5 Adicione um procedimento ao sistema do restaurante. Ele deve
+-- - Receber um parâmetro VARIADIC contendo nomes de pessoas
+-- - Fazer uma inserção na tabela de clientes para cada nome recebido
+-- - Receber um parâmetro de saída que contém o seguinte texto:
+-- “Os clientes: Pedro, Ana, João etc foram cadastrados”
+-- Evidentemente, o resultado deve conter os nomes que de fato foram enviados por meio do
+-- parâmetro VARIADIC.
+CREATE OR REPLACE PROCEDURE cadastrar_clientes(
+	nome VARCHAR[], 
+	OUT mensagem VARCHAR
+) LANGUAGE plpgsql
+AS $$
+DECLARE
+    cliente_inseridos INT := 0;
+BEGIN
+    FOREACH nome IN ARRAY nome
+    LOOP
+        INSERT INTO tb_cliente (nome) VALUES (nome);
+        cliente_inseridos := cliente_inseridos + 1;
+    END LOOP;
+
+    IF cliente_inseridos = 0 THEN
+        mensagem := 'Nenhum cliente foi cadastrado.';
+    ELSIF cliente_inseridos = 1 THEN
+        mensagem := 'O cliente ' || nome[1] || ' foi cadastrado.';
+    ELSE
+        mensagem := 'Os clientes: ' || array_to_string(nome, ', ') || ' foram cadastrados.';
+    END IF;
+END;
+$$;
+
+
+
+
+
+
+
+
+
 -- 1.4 Adicione um procedimento ao sistema do restaurante. Ele deve
 -- - Receber um parâmetro de entrada e saída (INOUT)
 -- - Na entrada, o parâmetro possui o código de um cliente
 -- - Na saída, o parâmetro deve possuir o número total de pedidos realizados pelo cliente
-DROP PROCEDURE total_pedidos_cliente(integer);
-CREATE OR REPLACE PROCEDURE total_pedidos_cliente(
-	INOUT cod_cliente INT
-)
-LANGUAGE plpgsql
-AS $$
-DECLARE
-    total_pedidos INT;
-BEGIN
-    SELECT COUNT(*) INTO total_pedidos
-    FROM tb_pedido
-    WHERE cod_cliente = cod_cliente;
+-- DROP PROCEDURE total_pedidos_cliente(integer);
+-- CREATE OR REPLACE PROCEDURE total_pedidos_cliente(
+-- 	INOUT cod_cliente INT
+-- )
+-- LANGUAGE plpgsql
+-- AS $$
+-- DECLARE
+--     total_pedidos INT;
+-- BEGIN
+--     SELECT COUNT(*) INTO total_pedidos
+--     FROM tb_pedido
+--     WHERE cod_cliente = cod_cliente;
 	
-    cod_cliente := total_pedidos; 
-END;
-$$;
+--     cod_cliente := total_pedidos; 
+-- END;
+-- $$;
 
 
 
