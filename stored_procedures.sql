@@ -1,21 +1,43 @@
 -- Exercicio
--- 1.3 Reescreva o exercício 1.2 de modo que o total de pedidos seja armazenado em uma
--- variável de saída (OUT).
+-- 1.4 Adicione um procedimento ao sistema do restaurante. Ele deve
+-- - Receber um parâmetro de entrada e saída (INOUT)
+-- - Na entrada, o parâmetro possui o código de um cliente
+-- - Na saída, o parâmetro deve possuir o número total de pedidos realizados pelo cliente
+DROP PROCEDURE total_pedidos_cliente(integer);
 CREATE OR REPLACE PROCEDURE total_pedidos_cliente(
-	IN cod_cliente INT, 
-	OUT total_pedidos INT
+	INOUT cod_cliente INT
 )
 LANGUAGE plpgsql
 AS $$
+DECLARE
+    total_pedidos INT;
 BEGIN
     SELECT COUNT(*) INTO total_pedidos
     FROM tb_pedido
     WHERE cod_cliente = cod_cliente;
+	
+    cod_cliente := total_pedidos; 
 END;
 $$;
 
 
 
+
+
+-- 1.3 Reescreva o exercício 1.2 de modo que o total de pedidos seja armazenado em uma
+-- variável de saída (OUT).
+-- CREATE OR REPLACE PROCEDURE total_pedidos_cliente(
+-- 	IN cod_cliente INT, 
+-- 	OUT total_pedidos INT
+-- )
+-- LANGUAGE plpgsql
+-- AS $$
+-- BEGIN
+--     SELECT COUNT(*) INTO total_pedidos
+--     FROM tb_pedido
+--     WHERE cod_cliente = cod_cliente;
+-- END;
+-- $$;
 
 
 
